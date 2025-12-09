@@ -107,7 +107,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.github.clyotska.weatherappuniproject/com.github.clyotska.weatherappuniproject.HelloApplication
+                                com.github.clyotska.weatherappuniproject/com.github.clyotska.weatherappuniproject.App
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
