@@ -24,6 +24,25 @@ public class UserDao {
         }
     }
 
+    public boolean isValidCredentials(String username, String password) {
+        String sql = "SELECT password FROM users WHERE username = ? LIMIT 1";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String storedPassword = resultSet.getString("password");
+                    return storedPassword != null && storedPassword.equals(password);
+                }
+                return false;
+            }
+        } catch (SQLException | NullPointerException e) {
+            System.err.println("Failed to validate credentials");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean addUser(User user) {
         String sql = "INSERT INTO users(username, password, city) VALUES (?, ?, ?)";
         try (Connection connection = DatabaseConnection.getConnection();
