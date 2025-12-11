@@ -1,5 +1,7 @@
 package com.github.clyotska.weatherappuniproject.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class User {
     private int id;
     private String username;
@@ -9,7 +11,11 @@ public class User {
     public User(String username, String password, String city) {
         this.username = username;
         this.password = password;
-        this.city = city;
+        this.city = StringUtils.capitalize(city);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUsername() {

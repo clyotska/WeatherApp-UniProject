@@ -1,12 +1,17 @@
 package com.github.clyotska.weatherappuniproject.controller;
 
+import com.github.clyotska.weatherappuniproject.App;
 import com.github.clyotska.weatherappuniproject.dao.UserDao;
 import com.github.clyotska.weatherappuniproject.model.User;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.util.Locale;
 
@@ -21,6 +26,8 @@ public class SignUpController {
     private TextField cityTextField;
     @FXML
     private Label feedbackLabel;
+    @FXML
+    private Button goToLoginButton;
 
     private final UserDao userDao = new UserDao();
 
@@ -78,6 +85,25 @@ public class SignUpController {
         } else {
             feedbackLabel.setStyle("-fx-text-fill: red;");
             feedbackLabel.setText("Failed to save user. Please try again.");
+        }
+    }
+
+    @FXML
+    private void handleGoToLogin() {
+        switchScene("login.fxml", "Log In");
+    }
+
+    private void switchScene(String fxml, String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource(fxml));
+            Pane pane = loader.load();
+            Stage stage = (Stage) signUpButton.getScene().getWindow();
+            stage.setScene(new Scene(pane, pane.getPrefWidth(), pane.getPrefHeight()));
+            stage.setTitle(title);
+        } catch (Exception e) {
+            feedbackLabel.setStyle("-fx-text-fill: red;");
+            feedbackLabel.setText("Unable to open " + title + " screen.");
+            e.printStackTrace();
         }
     }
 

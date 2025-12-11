@@ -2,6 +2,7 @@ package com.github.clyotska.weatherappuniproject.controller;
 
 import com.github.clyotska.weatherappuniproject.App;
 import com.github.clyotska.weatherappuniproject.dao.UserDao;
+import com.github.clyotska.weatherappuniproject.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -67,10 +68,8 @@ public class LoginController {
 
         boolean valid = userDao.isValidCredentials(username, password);
         if (valid) {
-            feedbackLabel.setStyle("-fx-text-fill: green;");
-            feedbackLabel.setText("Login successful.");
-            usernameTextField.clear();
-            passwordPasswordField.clear();
+            User user = userDao.findByUsername(username);
+            openWeatherScreen(user);
         } else {
             feedbackLabel.setStyle("-fx-text-fill: red;");
             feedbackLabel.setText("Incorrect password.");
@@ -93,6 +92,22 @@ public class LoginController {
         } catch (IOException e) {
             feedbackLabel.setStyle("-fx-text-fill: red;");
             feedbackLabel.setText("Unable to open " + title + " screen.");
+            e.printStackTrace();
+        }
+    }
+
+    private void openWeatherScreen(User user) {
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("weather.fxml"));
+            Pane pane = loader.load();
+            WeatherController controller = loader.getController();
+            controller.setUser(user);
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            stage.setScene(new Scene(pane, pane.getPrefWidth(), pane.getPrefHeight()));
+            stage.setTitle("Weather");
+        } catch (IOException e) {
+            feedbackLabel.setStyle("-fx-text-fill: red;");
+            feedbackLabel.setText("Unable to open weather screen.");
             e.printStackTrace();
         }
     }
